@@ -11,7 +11,7 @@ public class Something {
      * 无参构造
      */
     public Something() {
-        System.out.println("无参构造方法");
+        System.out.println("sout:无参构造方法");
     }
 
     /**
@@ -20,7 +20,7 @@ public class Something {
      * @param s 参数
      */
     public Something(String s) {
-        System.out.println("有参构造方法, 一个参数");
+        System.out.println("sout:有参构造方法, 一个参数");
     }
 
     /**
@@ -30,7 +30,7 @@ public class Something {
      * @param s2 参数2
      */
     public Something(String s1, String s2) {
-        System.out.println("有参构造方法, 两个参数");
+        System.out.println("sout:有参构造方法, 两个参数");
     }
 
     /**
@@ -39,7 +39,7 @@ public class Something {
      * @param s 参数
      */
     public Something(String... s) {
-        System.out.println("有参构造方法, 可变长参数");
+        System.out.println("sout:有参构造方法, 可变长参数");
     }
 
     /**
@@ -47,7 +47,7 @@ public class Something {
      *
      */
     public static void staticMethodNoReturn() {
-        System.out.println("无参无返回值静态方法");
+        System.out.println("sout:无参无返回值静态方法");
     }
     
     /**
@@ -55,8 +55,8 @@ public class Something {
      *
      */
     public static String staticMethod() {
-        System.out.println("无参静态方法");
-        return "";
+        System.out.println("sout:无参静态方法");
+        return "return:无参静态方法";
     }
 
     /**
@@ -65,8 +65,8 @@ public class Something {
      * @param s 参数
      */
     public static String staticMethod(String s) {
-        System.out.println("有参静态方法, 一个参数");
-        return "";
+        System.out.println("sout:有参静态方法, 一个参数");
+        return "return:有参静态方法, 一个参数";
     }
 
     /**
@@ -75,8 +75,8 @@ public class Something {
      * @param s 参数
      */
     public static String staticMethod(String... s) {
-        System.out.println("有参静态方法, 可变长参数");
-        return "";
+        System.out.println("sout:有参静态方法, 可变长参数");
+        return "return:有参静态方法, 可变长参数";
     }
 
     /**
@@ -86,23 +86,23 @@ public class Something {
      * @param s2 参数2
      */
     public static String staticMethod(String s1, String s2) {
-        System.out.println("有参静态方法, 两个参数");
-        return "";
+        System.out.println("sout:有参静态方法, 两个参数");
+        return "return:有参静态方法, 两个参数";
     }
 
     /**
      * 无参无返回值对象方法
      */
     public void objectMethodNoReturn() {
-        System.out.println("无参无返回值对象方法");
+        System.out.println("sout:无参无返回值对象方法");
     }
 
     /**
      * 无参对象方法
      */
     public String objectMethod() {
-        System.out.println("无参对象方法");
-        return "";
+        System.out.println("sout:无参对象方法");
+        return "return:无参对象方法";
     }
 
     /**
@@ -111,8 +111,8 @@ public class Something {
      * @param s 参数
      */
     public String objectMethod(String s) {
-        System.out.println("有参对象方法, 一个参数");
-        return "";
+        System.out.println("sout:有参对象方法, 一个参数");
+        return "return:有参对象方法, 一个参数";
     }
 
     /**
@@ -122,8 +122,8 @@ public class Something {
      * @param s2 参数2
      */
     public String objectMethod(String s1, String s2) {
-        System.out.println("有参对象方法, 两个参数");
-        return "";
+        System.out.println("sout:有参对象方法, 两个参数");
+        return "return:有参对象方法, 两个参数";
     }
 
     /**
@@ -132,7 +132,7 @@ public class Something {
      * @param s 参数
      */
     public String objectMethod(String... s) {
-        System.out.println("有参对象方法, 可变长参数");
-        return "";
+        System.out.println("sout:有参对象方法, 可变长参数");
+        return "return:有参对象方法, 可变长参数";
     }
 }

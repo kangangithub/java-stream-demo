@@ -30,11 +30,11 @@ public class DoubleColonTest {
 
     @Test
     public void test10() {
-        // ::调用无参静态方法
+        // ::调用无参有返回值静态方法
         Convert10<String> c1 = Something::staticMethod;
         c1.apply();  // 调用的是无参静态方法
 
-        // ::调用无参对象方法
+        // ::调用无参有返回值对象方法
         Something something = new Something();
         Convert10<String> c2 = something::objectMethod;
         c2.apply();  // 调用的是无参对象方法

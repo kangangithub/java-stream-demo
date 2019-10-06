@@ -81,7 +81,7 @@ public class TerminalTest {
     public void reduceTest() {
         List<Integer> numbers = Stream.iterate(0, x -> x + 1).limit(10).collect(Collectors.toList());
         // 计算列表所有元素的和, 归约操作初始值为0, 0+0, 0+1, 1+2, 3+3, 6+4, ...
-        System.out.println(numbers.stream().reduce((a, b) -> a + b).orElse(null));
+        System.out.println(numbers.stream().reduce((a, b) -> a + b));
         // 计算列表所有元素的和, 归约操作初始值为10, 10+0, 10+1, 11+2, 13+3, 16+4, ...
         System.out.println(numbers.stream().reduce(10, (a, b) -> a + b));
         // 串行流, (s1, s2) -> s1 + s2不起作用, 4+0, 4+1, 5+2, 7+3, 结果10
@@ -107,9 +107,10 @@ public class TerminalTest {
                 }
             }
         };
-        System.out.println(mapList.parallelStream().map(entry -> (BigDecimal) entry.get("a")).reduce(BigDecimal::add).orElse(null));
-        System.out.println(mapList.parallelStream().map(entry -> (BigDecimal) entry.get("b")).reduce(BigDecimal::add).orElse(null));
-        System.out.println(mapList.parallelStream().map(entry -> (BigDecimal) entry.get("c")).reduce(BigDecimal::add).orElse(null));
+        // T get(); 返回Optional对象的值, 需通过isPresent()为true的判断, 否则抛异常NoSuchElementException("No value present");
+        System.out.println(mapList.stream().map(entry -> (BigDecimal) entry.get("a")).reduce(BigDecimal::add).get());
+        System.out.println(mapList.stream().map(entry -> (BigDecimal) entry.get("b")).reduce(BigDecimal::add).get());
+        System.out.println(mapList.stream().map(entry -> (BigDecimal) entry.get("c")).reduce(BigDecimal::add).get());
     }
 
     /**
@@ -119,9 +120,10 @@ public class TerminalTest {
     @Test
     public void minAndMaxTest() {
         List<Integer> integerList = Arrays.asList(1, 2, 3);
-        System.out.println(integerList.parallelStream().max(Comparator.comparing(Function.identity())).orElse(null));
-        System.out.println(integerList.parallelStream().max(Comparator.comparingInt(Integer::intValue)).orElse(null));
-        System.out.println(integerList.parallelStream().min(Integer::compareTo).orElse(null));
+        // T get(); 返回Optional对象的值, 需通过isPresent()为true的判断, 否则抛异常NoSuchElementException("No value present");
+        System.out.println(integerList.stream().max(Comparator.comparing(Function.identity())).get());
+        System.out.println(integerList.stream().max(Comparator.comparingInt(Integer::intValue)).get());
+        System.out.println(integerList.stream().min(Integer::compareTo).get());
     }
 
     /**
@@ -129,8 +131,8 @@ public class TerminalTest {
      */
     @Test
     public void countTest() {
-        System.out.println(Arrays.asList(1, 2, 3).parallelStream().count());
-        System.out.println(Employee.EMPLOYEE_LIST.parallelStream().filter(employee -> employee.getAge() > 30).count());
+        System.out.println(Arrays.asList(1, 2, 3).stream().count());
+        System.out.println(Employee.EMPLOYEE_LIST.stream().filter(employee -> employee.getAge() > 30).count());
     }
 
     /**
@@ -141,9 +143,9 @@ public class TerminalTest {
     @Test
     public void matchTest() {
         List<String> stringList = Arrays.asList("a", "a", "a", "a", "b");
-        System.out.println(stringList.parallelStream().anyMatch("a"::equals));
-        System.out.println(stringList.parallelStream().allMatch("a"::equals));
-        System.out.println(stringList.parallelStream().noneMatch("a"::equals));
+        System.out.println(stringList.stream().anyMatch("a"::equals));
+        System.out.println(stringList.stream().allMatch("a"::equals));
+        System.out.println(stringList.stream().noneMatch("a"::equals));
     }
 
     /**
@@ -156,11 +158,11 @@ public class TerminalTest {
     public void findTest() {
         List<String> stringList = Arrays.asList("d", "b", "a", "c", "a");
         // 串行流
-        System.out.println(stringList.stream().filter(s -> !"a".equals(s)).findFirst().orElse(null));
-        System.out.println(stringList.stream().filter(s -> !"a".equals(s)).findAny().orElse(null));
+        System.out.println(stringList.stream().filter(s -> !"a".equals(s)).findFirst());
+        System.out.println(stringList.stream().filter(s -> !"a".equals(s)).findAny());
         // 并行流
-        System.out.println(stringList.parallelStream().filter(s -> !"a".equals(s)).findFirst().orElse(null));
-        System.out.println(stringList.parallelStream().filter(s -> !"a".equals(s)).findAny().orElse(null));
+        System.out.println(stringList.parallelStream().filter(s -> !"a".equals(s)).findFirst());
+        System.out.println(stringList.parallelStream().filter(s -> !"a".equals(s)).findAny());
     }
 
     /**
@@ -228,7 +230,7 @@ public class TerminalTest {
         }};
         // 定义筛选条件
         Predicate<List<Integer>> listPredicate = list -> list.contains(0);
-        LinkedList<List<Integer>> linkedListList = listList.parallelStream().collect(
+        LinkedList<List<Integer>> linkedListList = listList.stream().collect(
                 LinkedList::new,
                 (linkedList, list) -> {
                     if (listPredicate.test(list)) {
@@ -239,59 +241,59 @@ public class TerminalTest {
         System.out.println(Arrays.toString(linkedListList.toArray()));
 
         // 取出对象列表中对象的salary组成新list, collect可以用toArray代替
-        List<Double> salaryList = Employee.EMPLOYEE_LIST.parallelStream().map(Employee::getSalary).collect(Collectors.toList());
+        List<Double> salaryList = Employee.EMPLOYEE_LIST.stream().map(Employee::getSalary).collect(Collectors.toList());
         System.out.println(Arrays.toString(salaryList.toArray()));
         // 取出对象列表中对象的age组成新set, 会去重
-        Set<Integer> ageSet = Employee.EMPLOYEE_LIST.parallelStream().map(Employee::getAge).collect(Collectors.toSet());
+        Set<Integer> ageSet = Employee.EMPLOYEE_LIST.stream().map(Employee::getAge).collect(Collectors.toSet());
         System.out.println(Arrays.toString(ageSet.toArray()));
         // 以对象列表中对象的salary为key, 以列表中对象为value
-        Map<Double, Employee> nameMap = Employee.EMPLOYEE_LIST.parallelStream().collect(Collectors.toMap(Employee::getSalary, Function.identity()));
+        Map<Double, Employee> nameMap = Employee.EMPLOYEE_LIST.stream().collect(Collectors.toMap(Employee::getSalary, Function.identity()));
         System.out.println(Arrays.toString(nameMap.entrySet().toArray()));
         // 计算元素个数
-        System.out.println(Employee.EMPLOYEE_LIST.parallelStream().collect(Collectors.counting()));
-        System.out.println((Long) Employee.EMPLOYEE_LIST.parallelStream().count());
+        System.out.println(Employee.EMPLOYEE_LIST.stream().collect(Collectors.counting()));
+        System.out.println(Employee.EMPLOYEE_LIST.stream().count());
         // 计算元素salary的和
-        System.out.println(Employee.EMPLOYEE_LIST.parallelStream().collect(Collectors.summingDouble(Employee::getSalary)));
-        System.out.println((Double) Employee.EMPLOYEE_LIST.parallelStream().mapToDouble(Employee::getSalary).sum());
+        System.out.println(Employee.EMPLOYEE_LIST.stream().collect(Collectors.summingDouble(Employee::getSalary)));
+        System.out.println( Employee.EMPLOYEE_LIST.stream().mapToDouble(Employee::getSalary).sum());
         // 计算元素age的平均
-        System.out.println(Employee.EMPLOYEE_LIST.parallelStream().collect(Collectors.averagingInt(Employee::getAge)));
+        System.out.println(Employee.EMPLOYEE_LIST.stream().collect(Collectors.averagingInt(Employee::getAge)));
         // 综合处理, summarizingInt,summarizingLong,summarizingDouble, 平均数,最值,和,个数
-        DoubleSummaryStatistics doubleSummaryStatistics = Employee.EMPLOYEE_LIST.parallelStream().collect(Collectors.summarizingDouble(Employee::getSalary));
+        DoubleSummaryStatistics doubleSummaryStatistics = Employee.EMPLOYEE_LIST.stream().collect(Collectors.summarizingDouble(Employee::getSalary));
         System.out.println(doubleSummaryStatistics.getAverage());
         System.out.println(doubleSummaryStatistics.getCount());
         System.out.println(doubleSummaryStatistics.getMax());
         System.out.println(doubleSummaryStatistics.getMin());
         System.out.println(doubleSummaryStatistics.getSum());
         // join连接
-        System.out.println(Employee.EMPLOYEE_LIST.parallelStream().map(Employee::getName).collect(Collectors.joining()));
-        System.out.println(Employee.EMPLOYEE_LIST.parallelStream().map(Employee::getName).collect(Collectors.joining(", ")));
-        System.out.println(Employee.EMPLOYEE_LIST.parallelStream().map(Employee::getName).collect(Collectors.joining(", ", "前缀", "后缀")));
+        System.out.println(Employee.EMPLOYEE_LIST.stream().map(Employee::getName).collect(Collectors.joining()));
+        System.out.println(Employee.EMPLOYEE_LIST.stream().map(Employee::getName).collect(Collectors.joining(", ")));
+        System.out.println(Employee.EMPLOYEE_LIST.stream().map(Employee::getName).collect(Collectors.joining(", ", "前缀", "后缀")));
         // maxBy minBy 按照比较器中的比较结果筛选,
         // 筛选Double类型(salary)时maxBy报错, 翻源码得知Collectors.maxBy/minBy需要一个Comparator,并最终调用Comparator.compare()方法,该方法返回值为int, Double.max/min返回double
-        System.out.println(Employee.EMPLOYEE_LIST.parallelStream().map(Employee::getAge).collect(Collectors.maxBy(Integer::min)).orElse(null));
-        System.out.println(Employee.EMPLOYEE_LIST.parallelStream().map(Employee::getAge).collect(Collectors.minBy(Integer::min)).orElse(null));
+        System.out.println(Employee.EMPLOYEE_LIST.stream().map(Employee::getAge).collect(Collectors.maxBy(Integer::min)));
+        System.out.println(Employee.EMPLOYEE_LIST.stream().map(Employee::getAge).collect(Collectors.minBy(Integer::min)));
         // reducing 归约
-        System.out.println(Employee.EMPLOYEE_LIST.parallelStream().map(Employee::getSalary).collect(Collectors.reducing(0D, Double::sum)));
-        System.out.println(Employee.EMPLOYEE_LIST.parallelStream().map(Employee::getSalary).collect(Collectors.reducing(Double::max)).orElse(null));
+        System.out.println(Employee.EMPLOYEE_LIST.stream().map(Employee::getSalary).collect(Collectors.reducing(0D, Double::sum)));
+        System.out.println(Employee.EMPLOYEE_LIST.stream().map(Employee::getSalary).collect(Collectors.reducing(Double::max)));
         // groupingBy分组, 以name分组, key--name, value--List<Employee>
         // Collector<T, ?, Map<K, List<T>>> groupingBy(Function<? super T, ? extends K> classifier)
-        Map<String, List<Employee>> stringListMap = Employee.EMPLOYEE_LIST.parallelStream().collect(Collectors.groupingBy(Employee::getName));
+        Map<String, List<Employee>> stringListMap = Employee.EMPLOYEE_LIST.stream().collect(Collectors.groupingBy(Employee::getName));
         System.out.println(Arrays.toString(stringListMap.entrySet().toArray()));
         // Collector<T, ?, Map<K, D>> groupingBy(Function<? super T, ? extends K> classifier, Collector<? super T, A, D> downstream)
         // 以name分组, key--name, value--Employee对象的个数
-        Map<String, Long> stringLongMap = Employee.EMPLOYEE_LIST.parallelStream().collect(Collectors.groupingBy(Employee::getName, Collectors.counting()));
+        Map<String, Long> stringLongMap = Employee.EMPLOYEE_LIST.stream().collect(Collectors.groupingBy(Employee::getName, Collectors.counting()));
         System.out.println(Arrays.toString(stringLongMap.entrySet().toArray()));
         // Collector<T, ?, Map<K, D>> groupingBy(Function<? super T, ? extends K> classifier, Collector<? super T, A, D> downstream)
         // 以name分组, key--name, value--Employee对象salary属性的平均值
-        Map<String, Double> stringDoubleMap = Employee.EMPLOYEE_LIST.parallelStream().collect(Collectors.groupingBy(Employee::getName, Collectors.averagingDouble(Employee::getSalary)));
+        Map<String, Double> stringDoubleMap = Employee.EMPLOYEE_LIST.stream().collect(Collectors.groupingBy(Employee::getName, Collectors.averagingDouble(Employee::getSalary)));
         System.out.println(Arrays.toString(stringDoubleMap.entrySet().toArray()));
         // Collector<T, ?, Map<Boolean, List<T>>> partitioningBy(Predicate<? super T> predicate)
         // 以employee的age>30分区, key--对象age>30为true否则false, value--对象列表
-        Map<Boolean, List<Employee>> booleanListMap = Employee.EMPLOYEE_LIST.parallelStream().collect(Collectors.partitioningBy(employee -> employee.getAge() > 30));
+        Map<Boolean, List<Employee>> booleanListMap = Employee.EMPLOYEE_LIST.stream().collect(Collectors.partitioningBy(employee -> employee.getAge() > 30));
         System.out.println(Arrays.toString(booleanListMap.entrySet().toArray()));
         // Collector<T, ?, Map<Boolean, D>> partitioningBy(Predicate<? super T> predicate, Collector<? super T, A, D> downstream)
         // 以employee的age>30分区, key--对象age>30为true否则false, value--列表中对象的个数
-        Map<Boolean, Long> booleanLongMap = Employee.EMPLOYEE_LIST.parallelStream().collect(Collectors.partitioningBy(employee -> employee.getAge() > 30, Collectors.counting()));
+        Map<Boolean, Long> booleanLongMap = Employee.EMPLOYEE_LIST.stream().collect(Collectors.partitioningBy(employee -> employee.getAge() > 30, Collectors.counting()));
         System.out.println(Arrays.toString(booleanLongMap.entrySet().toArray()));
     }
 }

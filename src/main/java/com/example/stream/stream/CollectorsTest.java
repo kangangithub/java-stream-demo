@@ -93,7 +93,7 @@ public class CollectorsTest {
     public void countingTest() {
         // 计算元素个数
         System.out.println(Employee.EMPLOYEE_LIST.parallelStream().collect(Collectors.counting()));
-        System.out.println((Long) Employee.EMPLOYEE_LIST.parallelStream().count());
+        System.out.println(Employee.EMPLOYEE_LIST.parallelStream().count());
     }
 
     /**
@@ -105,7 +105,7 @@ public class CollectorsTest {
     public void summingTest() {
         // 计算元素employee的属性salary的和
         System.out.println(Employee.EMPLOYEE_LIST.parallelStream().collect(Collectors.summingDouble(Employee::getSalary)));
-        System.out.println((Double) Employee.EMPLOYEE_LIST.parallelStream().mapToDouble(Employee::getSalary).sum());
+        System.out.println(Employee.EMPLOYEE_LIST.parallelStream().mapToDouble(Employee::getSalary).sum());
     }
 
     /**
@@ -202,7 +202,6 @@ public class CollectorsTest {
         // 以name分组, key--name, value--Employee对象salary属性的平均值, 将结果存入新建的TreeMap中
         Map<String, Double> stringDoubleMap = Employee.EMPLOYEE_LIST.parallelStream().collect(Collectors.groupingBy(Employee::getName, TreeMap::new, Collectors.averagingDouble(Employee::getSalary)));
         System.out.println(Arrays.toString(stringDoubleMap.entrySet().toArray()));
-        System.out.println(stringDoubleMap.getClass());
 
         // groupingBy分组, 以name分组, key--name, value--List<Employee>
         Map<String, List<Employee>> stringListMap1 = Employee.EMPLOYEE_LIST.parallelStream().collect(Collectors.groupingByConcurrent(Employee::getName));

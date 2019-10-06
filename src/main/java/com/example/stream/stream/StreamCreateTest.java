@@ -69,7 +69,7 @@ public class StreamCreateTest {
          * Files
          */
         // Stream<String> lines(Path path) 返回包含文件中所有行的流
-        // Stream<String> lines(Path path, Charset cs) 返回包含文件中所有行的流
+        // Stream<String> lines(Path path, Charset cs) 以cs编码返回包含文件中所有行的流
         Files.lines(path).limit(3).forEach(System.out::println);
         Files.lines(path, StandardCharsets.UTF_8).limit(3).forEach(System.out::println);
 

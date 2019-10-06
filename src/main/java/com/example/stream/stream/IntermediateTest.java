@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import java.text.Collator;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -76,6 +77,8 @@ public class IntermediateTest {
     public void filterTest() {
         Arrays.asList(1, 2, 3, 4, 5).parallelStream().filter(value -> value > 2).forEach(System.out::println);
         Employee.EMPLOYEE_LIST.stream().filter(employee -> employee.getAge() < 50).forEach(System.out::println);
+        List<Employee> employeeList = Employee.EMPLOYEE_LIST.stream().filter(employee -> employee.getAge() < 50).collect(Collectors.toList());
+        employeeList.forEach(System.out::println);
     }
 
     /**
